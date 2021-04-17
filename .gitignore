@@ -1,1 +1,8 @@
 *.swp
+venv/
+__pycache__
+SimpleCRM/settings/local.py
+SimpleCRM/settings/production.py
+static/
+
+*/migrations/*
