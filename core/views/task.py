@@ -1,5 +1,7 @@
-from core.serializers.task import CreateTaskSerializer, TaskInfo
+from core.serializers.task import TaskSerializer, TaskInfo
 from core.models import Task
+
+from django.shortcuts import get_object_or_404
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -13,7 +15,7 @@ class TaskCreateView(APIView):
     permission_classes = [IsAuthenticated, ]
 
     def post(self, request):
-        serializer = CreateTaskSerializer(data=request.data)
+        serializer = TaskSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.validated_data['user'] = request.user
         task = serializer.save()
@@ -40,11 +42,21 @@ class TaskDetailView(APIView):
     renderer_classes = [JSONRenderer, ]
     permission_classes = [IsAuthenticated, ]
 
-    def get(self, pk):
-        pass
+    def get(self, request, pk):
+        task = get_object_or_404(Task, id=pk)
+        task_info = TaskInfo(task)
+        return Response(data=task_info.data, status=200)
 
     def put(self, request, pk):
-        pass
+        task = get_object_or_404(Task,id=pk, user=request.user)
+        serializer = TaskSerializer(task, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        updated_task = serializer.save()
+        task_info = TaskInfo(updated_task)
+        return Response(data=task_info.data, status=200)
+
 
     def delete(self, request, pk):
-        pass
+        task = get_object_or_404(Task, id=pk, user=request.user)
+        task.delete()
+        return Response(data={"detail": "Successfully deleted"}, status=200)
