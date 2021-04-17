@@ -9,10 +9,6 @@ class RegisterView(APIView):
     renderer_classes = [JSONRenderer, ]
 
     def post(self, request):
-        """
-        Acc: Public
-        Des: User registration
-        """
         serializer = UserRegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
