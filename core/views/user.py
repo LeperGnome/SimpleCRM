@@ -5,17 +5,6 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
 
-class LoginView(APIView):
-    renderer_classes = [JSONRenderer, ]
-
-    def post(self, request):
-        """
-        Acc: Public
-        Des: User authentication
-        """
-        pass
-
-
 class RegisterView(APIView):
     renderer_classes = [JSONRenderer, ]
 
